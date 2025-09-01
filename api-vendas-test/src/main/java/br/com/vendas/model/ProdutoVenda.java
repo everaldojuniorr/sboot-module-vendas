@@ -10,14 +10,17 @@ import lombok.Setter;
 @Setter
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
-@Table(name = "Cliente")
-public class Cliente {
-    @jakarta.persistence.Id
+@Table(name = "Produto")
+public class ProdutoVenda {
+    @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(nullable = false)
-    private int cliente_id;
+    @Column(nullable = true)
+    private int produto_id;
+    private String nomeProduto;
+    private long valorUnitarioProduto;
+    private int quantidade;
 
-    private long cpfCnpj;
-    private String nome;
-    private String sobreNome;
+    private enum statusProduto {
+        CANCELADO, APROVADO
+    }
 }

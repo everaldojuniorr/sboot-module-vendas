@@ -6,7 +6,6 @@ import lombok.*;
 import java.util.Date;
 import java.util.List;
 
-@Builder
 @NoArgsConstructor
 @Getter
 @Setter
@@ -19,9 +18,15 @@ public class Venda {
     private int id;
 
     private Date dataVenda;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
     private String filial;
-    private List<Produto> produtos;
+
+    @OneToMany
+    @JoinColumn(name = "produto_id")
+    private List<ProdutoVenda> produtos;
 
     private enum statusVenda {
         CANCELADA, APROVADA
