@@ -1,6 +1,5 @@
 package br.com.vendas.service;
 
-import br.com.vendas.event.VendaEventPublisher;
 import br.com.vendas.model.Produto;
 import br.com.vendas.model.Venda;
 import br.com.vendas.model.VendaItem;
@@ -10,7 +9,6 @@ import br.com.vendas.repository.ProdutoRepository;
 import br.com.vendas.repository.VendaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +27,6 @@ public class VendaService {
     private final ClienteRepository clienteRepository;
     private final FilialRepository filialRepository;
     private final ProdutoRepository produtoRepository;
-    private final RabbitTemplate rabbitTemplate;
-
     private static final Logger log = LoggerFactory.getLogger(VendaService.class);
 
     public List<Venda> listarTodas() {
@@ -81,8 +77,8 @@ public class VendaService {
         Venda criada = new Venda();
         try{
             criada = vendaRepository.save(venda);
-            rabbitTemplate.convertAndSend(criada);
             log.info("Evento: CompraEfetuada -> vendaId={}", criada.getId());
+
         } catch (Exception e) {
             e.printStackTrace();
         }

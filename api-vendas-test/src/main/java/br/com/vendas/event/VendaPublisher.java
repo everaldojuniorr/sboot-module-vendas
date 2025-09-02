@@ -2,11 +2,12 @@ package br.com.vendas.event;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
-public class VendaEventPublisher {
+public class VendaPublisher {
 
     private final RabbitTemplate rabbitTemplate;
 
-    public VendaEventPublisher(RabbitTemplate rabbitTemplate) {
+
+    public VendaPublisher(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
