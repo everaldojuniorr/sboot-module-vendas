@@ -36,11 +36,13 @@ public class VendaService {
     }
 
     public Venda buscarPorId(Long id) {
+        log.info("Evento: buscarPorId -> vendaId={}", id);
         return vendaRepository.findById(Math.toIntExact(id)).orElse(null);
     }
 
     @Transactional
     public Venda criarVenda(Venda venda) {
+        log.info("Evento: criarVenda -> nomeCliente={}", venda.getCliente().getNome());
         validarItensVenda(venda);
 
         venda.setCliente(clienteRepository.findById(Math.toIntExact(venda.getCliente().getId()))
@@ -99,7 +101,7 @@ public class VendaService {
         vendaExistente.getItens().addAll(vendaAtualizada.getItens());
 
         validarItensVenda(vendaExistente);
-
+        log.info("Evento: AtualizandoVenda -> vendaId={}", vendaExistente.getId());
         return criarVenda(vendaExistente);
     }
 
@@ -128,7 +130,7 @@ public class VendaService {
         }
 
         validarItensVenda(vendaExistente);
-
+        log.info("Evento: AtualizandoVenda -> vendaId={}", vendaExistente.getId());
         return criarVenda(vendaExistente);
     }
 
@@ -136,6 +138,7 @@ public class VendaService {
     public boolean deletarVenda(Long id) {
         Optional<Venda> venda = vendaRepository.findById(Math.toIntExact(id));
         if (venda.isPresent()) {
+            log.info("Evento: DeletandoVenda -> vendaId={}", id);
             vendaRepository.delete(venda.get());
             return true;
         }
