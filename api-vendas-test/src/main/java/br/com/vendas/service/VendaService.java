@@ -7,12 +7,16 @@ import br.com.vendas.repository.ClienteRepository;
 import br.com.vendas.repository.FilialRepository;
 import br.com.vendas.repository.ProdutoRepository;
 import br.com.vendas.repository.VendaRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class VendaService {
@@ -21,16 +25,21 @@ public class VendaService {
     private final ClienteRepository clienteRepository;
     private final FilialRepository filialRepository;
     private final ProdutoRepository produtoRepository;
+    private final RabbitTemplate rabbitTemplate;
 
     public VendaService(VendaRepository vendaRepository,
                         ClienteRepository clienteRepository,
                         FilialRepository filialRepository,
-                        ProdutoRepository produtoRepository) {
+                        ProdutoRepository produtoRepository,
+                        RabbitTemplate rabbitTemplate) {
         this.vendaRepository = vendaRepository;
         this.clienteRepository = clienteRepository;
         this.filialRepository = filialRepository;
         this.produtoRepository = produtoRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
+
+    private static final Logger log = LoggerFactory.getLogger(VendaService.class);
 
     public List<Venda> listarTodas() {
         return vendaRepository.findAll();
@@ -74,8 +83,14 @@ public class VendaService {
         }
 
         venda.setValorTotal(BigDecimal.valueOf(valorTotalVenda.doubleValue()));
+        try{
+            Venda criada = vendaRepository.save(venda);
+            log.info("Evento: CompraEfetuada -> vendaId={}", criada.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        return vendaRepository.save(venda);
+        return venda;
     }
 
     @Transactional
