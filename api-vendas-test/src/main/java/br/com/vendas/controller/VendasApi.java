@@ -1,9 +1,10 @@
 package br.com.vendas.controller;
 
 import br.com.vendas.model.Venda;
-import br.com.vendas.repository.VendasRepository;
+import br.com.vendas.repository.VendaRepository;
 import br.com.vendas.service.VendaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,14 +14,14 @@ import java.util.Optional;
 public class VendasApi {
 
     @Autowired
-    VendasRepository vendasRepository;
+    VendaRepository vendaRepository;
 
     @Autowired
     VendaService vendaService;
 
    @GetMapping(path = { "/findAllVendas"})
     public List<Venda> getVendas() {
-       return vendasRepository.findAll();
+       return vendaRepository.findAll();
    }
 
    @GetMapping(path = { "/venda/{id}"})
@@ -30,7 +31,6 @@ public class VendasApi {
 
    @PutMapping(path = { "/venda/save"})
     public void addVenda(@RequestBody Venda venda) {
-       vendasRepository.save(venda);
+       vendaService.criarVenda(venda);
    }
-
 }

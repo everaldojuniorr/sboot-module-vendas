@@ -3,18 +3,19 @@ package br.com.vendas.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Entity
-@Table(name = "cliente")
+@Table(name = "produto")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cliente {
+public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    private String email;
-    private String cpf;
+    private BigDecimal valorUnitario;
 }
